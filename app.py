@@ -1,13 +1,16 @@
 import os
-import streamlit as st
-# --- CLOUD SQLITE PATCH FOR CHROMADB ---
-__import__('pysqlite3')
 import sys
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
-# ---------------------------------------
+import streamlit as st
 
-from dotenv import load_dotenv
-from langchain_chroma import Chroma
+# --- SMART SQLITE PATCH FOR STREAMLIT CLOUD ---
+# This safely ignores the patch on your Windows PC but applies it on the Linux Cloud
+try:
+    __import__('pysqlite3')
+    sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+except ImportError:
+    pass 
+# ----------------------------------------------
+
 from dotenv import load_dotenv
 from langchain_chroma import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
